@@ -74,7 +74,7 @@ def test_update_wrong_user(client, other_user, token):
         },
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
-    assert response.json() == {'detail': 'Not enough permissions'}
+    assert response.json() == {'detail': 'Não autorizado'}
 
 
 def test_delete_user(client, user, token):
