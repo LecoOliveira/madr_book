@@ -21,3 +21,30 @@ class Token(BaseModel):
 
 class Message(BaseModel):
     message: str
+
+
+class LivroSchema(BaseModel):
+    ano: str
+    titulo: str
+    autor_id: int
+
+
+class LivroPublic(LivroSchema):
+    id: int
+
+
+class LivroList(BaseModel):
+    livros: list[LivroPublic]
+
+
+class LivroUpdate(BaseModel):
+    ano: str | None = None
+    titulo: str | None = None
+
+
+class RomancistaSchema(BaseModel):
+    nome: str
+
+
+class RomancistaPublic(RomancistaSchema):
+    id: int

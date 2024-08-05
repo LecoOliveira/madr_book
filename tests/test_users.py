@@ -24,8 +24,8 @@ def test_user_already_exists(client, user):
         json={
             'username': f'{user.username}',
             'email': 'example@example.com',
-            'password': 'test'
-        }
+            'password': 'test',
+        },
     )
     assert response.status_code == HTTPStatus.CONFLICT
     assert response.json() == {'detail': 'Username já consta no MADR'}
@@ -37,8 +37,8 @@ def test_email_already_exists(client, user):
         json={
             'username': 'test',
             'email': f'{user.email}',
-            'password': 'test'
-        }
+            'password': 'test',
+        },
     )
     assert response.status_code == HTTPStatus.CONFLICT
     assert response.json() == {'detail': 'Email já consta no MADR'}
@@ -52,14 +52,14 @@ def test_update_user(client, user, token):
             'username': 'test',
             'email': 'test@test.com',
             'password': 'test',
-            'id': user.id
-        }
+            'id': user.id,
+        },
     )
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
         'username': 'test',
         'email': 'test@test.com',
-        'id': user.id
+        'id': user.id,
     }
 
 
@@ -79,17 +79,15 @@ def test_update_wrong_user(client, other_user, token):
 
 def test_delete_user(client, user, token):
     response = client.delete(
-        f'/conta/{user.id}',
-        headers={'Authorization': f'Bearer {token}'}
+        f'/conta/{user.id}', headers={'Authorization': f'Bearer {token}'}
     )
     assert response.status_code == HTTPStatus.OK
-    assert response.json() == {'message': 'Usuário deletado'}
+    assert response.json() == {'message': 'Conta deletada com sucesso'}
 
 
 def test_delete_user_errado(client, other_user, token):
     response = client.delete(
-        f'/conta/{other_user.id}',
-        headers={'Authorization': f'Bearer {token}'}
+        f'/conta/{other_user.id}', headers={'Authorization': f'Bearer {token}'}
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
     assert response.json() == {'detail': 'Não autorizado'}

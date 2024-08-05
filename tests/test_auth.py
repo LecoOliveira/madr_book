@@ -77,12 +77,10 @@ def test_get_current_user_without_sub(client):
 
 def test_not_user(client, user, token):
     response = client.delete(
-        f'/conta/{user.id}',
-        headers={'Authorization': f'Bearer {token}'}
+        f'/conta/{user.id}', headers={'Authorization': f'Bearer {token}'}
     )
     response_2 = client.put(
-        f'/conta/{user.id}',
-        headers={'Authorization': f'Bearer {token}'}
+        f'/conta/{user.id}', headers={'Authorization': f'Bearer {token}'}
     )
     assert response.status_code == HTTPStatus.OK
     assert response_2.status_code == HTTPStatus.UNAUTHORIZED

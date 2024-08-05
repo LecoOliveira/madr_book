@@ -54,7 +54,7 @@ def update_user(
     user_id: int,
     user: UserSchema,
     session: T_Session,
-    current_user: T_current_user
+    current_user: T_current_user,
 ):
     if current_user.id != user_id:
         raise HTTPException(
@@ -84,4 +84,4 @@ def delete_user(
     session.delete(current_user)
     session.commit()
 
-    return {'message': 'Usuário deletado'}
+    return {'message': 'Conta deletada com sucesso'}
