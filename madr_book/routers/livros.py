@@ -7,13 +7,55 @@ from sqlalchemy.orm import Session
 
 from madr_book.database import get_session
 from madr_book.models import Livros, Romancistas, User
-from madr_book.schemas import LivroPublic, LivroSchema, LivroUpdate, Message
+from madr_book.schemas import (
+    LivroList,
+    LivroPublic,
+    LivroSchema,
+    LivroUpdate,
+    Message,
+)
 from madr_book.security import get_current_user
 from madr_book.settings import sanitize
 
 router = APIRouter(prefix='/livro', tags=['livro'])
 T_Session = Annotated[Session, Depends(get_session)]
 T_CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+@router.get('/{id}', status_code=HTTPStatus.OK, response_model=LivroPublic)
+def listar_livro(id: int, user: T_CurrentUser, session: T_Session,):
+    livro = session.scalar(select(Livros).where((Livros.id == id)))
+
+    if not livro:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='Livro não consta no MADR',
+        )
+
+    return livro
+
+
+@router.get('/', status_code=HTTPStatus.OK, response_model=LivroList)
+def listar_livros( # noqa
+    user: T_CurrentUser,
+    session: T_Session,
+    ano: str | None = None,
+    titulo: str | None = None,
+    autor_id: int | None = None,
+    offset: str | None = None,
+    limit: str | None = None,
+):
+    query = select(Livros)
+    if ano:
+        query = query.filter(Livros.ano.contains(ano))
+    if titulo:
+        query = query.filter(Livros.titulo.contains(titulo))
+    if autor_id:
+        query = query.where((Livros.autor_id == autor_id))
+
+    livros = session.scalars(query.offset(offset).limit(limit)).all()
+
+    return {'livros': livros}
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=LivroPublic)

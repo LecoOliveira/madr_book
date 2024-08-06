@@ -1,6 +1,101 @@
 from http import HTTPStatus
 
 
+def test_listar_livro_atraves_do_id(client, token, livro):
+    response = client.get(
+        f'/livro/{livro.id}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'ano': livro.ano,
+        'titulo': livro.titulo,
+        'autor_id': livro.autor_id,
+        'id': livro.id
+    }
+
+
+def test_listar_livro_atraves_do_id_se_nao_existe(client, token):
+    response = client.get(
+        '/livro/1',
+        headers={'Authorization': f'Bearer {token}'}
+    )
+    assert response.status_code == HTTPStatus.NOT_FOUND
+    assert response.json() == {'detail': 'Livro não consta no MADR'}
+
+
+def test_listar_livros_por_parametros(client, token, livro):
+    response = client.get(
+        '/livro/',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'livros': [
+            {
+                'ano': livro.ano,
+                'titulo': livro.titulo,
+                'autor_id': livro.autor_id,
+                'id': livro.id
+            }
+        ]
+    }
+
+
+def test_listar_livro_por_titulo(client, token, livro):
+    response = client.get(
+        '/livro/?titulo=Teste livro',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'livros': [
+            {
+                'ano': livro.ano,
+                'titulo': livro.titulo,
+                'autor_id': livro.autor_id,
+                'id': livro.id
+            }
+        ]
+    }
+
+
+def test_listar_livro_por_ano(client, token, livro):
+    response = client.get(
+        '/livro/?ano=1999',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'livros': [
+            {
+                'ano': livro.ano,
+                'titulo': livro.titulo,
+                'autor_id': livro.autor_id,
+                'id': livro.id
+            }
+        ]
+    }
+
+
+def test_listar_livro_por_autor(client, token, livro):
+    response = client.get(
+        f'/livro/?autor_id={livro.id}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'livros': [
+            {
+                'ano': livro.ano,
+                'titulo': livro.titulo,
+                'autor_id': livro.autor_id,
+                'id': livro.id
+            }
+        ]
+    }
+
+
 def test_registrar_livro(client, token, romancista):
     response = client.post(
         '/livro/',

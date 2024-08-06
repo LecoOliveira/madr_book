@@ -24,8 +24,8 @@ class LivroFactory(factory.Factory):
     class Meta:
         model = Livros
 
-    ano = factory.Faker('1991')
-    titulo = factory.Faker('Teste')
+    ano = factory.Faker('year')
+    titulo = factory.Faker('name')
     autor_id = 1
 
 
