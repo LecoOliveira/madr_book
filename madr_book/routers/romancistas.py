@@ -1,7 +1,8 @@
 from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from madr_book.database import get_session
@@ -26,6 +27,15 @@ def create_romancista(
     romancista: RomancistaSchema,
 ):
     db_romancista = Romancistas(nome=sanitize(romancista.nome))
+    romancista_ = session.scalar(
+        select(Romancistas).where((Romancistas.nome == romancista.nome))
+    )
+
+    if romancista_:
+        raise HTTPException(
+            status_code=HTTPStatus.CONFLICT,
+            detail='Romancista já consta no MADR'
+        )
 
     session.add(db_romancista)
     session.commit()

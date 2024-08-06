@@ -28,7 +28,7 @@ def criar_livro(user: T_CurrentUser, session: T_Session, livro: LivroSchema):
     if livro_:
         raise HTTPException(
                 status_code=HTTPStatus.BAD_REQUEST,
-                detail=f"Livro com o título {livro.titulo} já existe",
+                detail=f'Livro com o título {livro.titulo} já existe',
             )
 
     if not romancista:
@@ -90,7 +90,7 @@ def deletar_livro(livro_id: int, session: T_Session, user: T_CurrentUser):
         raise HTTPException(
             status_code=HTTPStatus.NOT_FOUND, detail='Livro não consta no MADR'
         )
-    
+
     session.delete(livro)
     session.commit()
 

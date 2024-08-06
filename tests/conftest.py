@@ -7,7 +7,7 @@ from testcontainers.postgres import PostgresContainer
 
 from madr_book.app import app
 from madr_book.database import create_engine, get_session
-from madr_book.models import User, table_registry
+from madr_book.models import Livros, Romancistas, User, table_registry
 from madr_book.security import get_password_hash
 
 
@@ -18,6 +18,15 @@ class UserFactory(factory.Factory):
     username = factory.Sequence(lambda n: f'test{n}')
     email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
     password = factory.LazyAttribute(lambda obj: f'{obj.username}senha')
+
+
+class LivroFactory(factory.Factory):
+    class Meta:
+        model = Livros
+
+    ano = factory.Faker('1991')
+    titulo = factory.Faker('Teste')
+    autor_id = 1
 
 
 @pytest.fixture
@@ -85,3 +94,22 @@ def token(client, user):
     )
 
     return response.json()['access_token']
+
+
+@pytest.fixture
+def romancista(session):
+    romancista_ = Romancistas(nome="Test Romancista")
+    session.add(romancista_)
+    session.commit()
+    session.refresh(romancista_)
+
+    return romancista_
+
+
+@pytest.fixture
+def livro(session, romancista):
+    livro = Livros(ano='1999', titulo="Teste livro", autor_id=romancista.id)
+    session.add(livro)
+    session.commit()
+
+    return livro
