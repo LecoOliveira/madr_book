@@ -98,7 +98,7 @@ def token(client, user):
 
 @pytest.fixture
 def romancista(session):
-    romancista_ = Romancistas(nome="Test Romancista")
+    romancista_ = Romancistas(nome="test romancista")
     session.add(romancista_)
     session.commit()
     session.refresh(romancista_)

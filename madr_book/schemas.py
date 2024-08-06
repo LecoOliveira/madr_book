@@ -48,3 +48,7 @@ class RomancistaSchema(BaseModel):
 
 class RomancistaPublic(RomancistaSchema):
     id: int
+
+
+class RomancistaList(BaseModel):
+    romancistas: list[RomancistaPublic]
