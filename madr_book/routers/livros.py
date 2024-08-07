@@ -39,7 +39,7 @@ def listar_livro(id: int, user: T_CurrentUser, session: T_Session,):
 def listar_livros( # noqa
     user: T_CurrentUser,
     session: T_Session,
-    ano: str | None = None,
+    ano: int | None = None,
     titulo: str | None = None,
     autor_id: int | None = None,
     offset: str | None = None,
@@ -47,7 +47,7 @@ def listar_livros( # noqa
 ):
     query = select(Livros)
     if ano:
-        query = query.filter(Livros.ano.contains(ano))
+        query = query.where((Livros.ano == ano))
     if titulo:
         query = query.filter(Livros.titulo.contains(titulo))
     if autor_id:

@@ -24,7 +24,7 @@ class Message(BaseModel):
 
 
 class LivroSchema(BaseModel):
-    ano: str
+    ano: int
     titulo: str
     autor_id: int
 
@@ -38,7 +38,7 @@ class LivroList(BaseModel):
 
 
 class LivroUpdate(BaseModel):
-    ano: str | None = None
+    ano: int | None = None
     titulo: str | None = None
 
 

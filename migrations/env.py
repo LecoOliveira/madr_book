@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+
 from madr_book.models import table_registry
 from madr_book.settings import Settings
 

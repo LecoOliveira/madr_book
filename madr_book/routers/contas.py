@@ -56,14 +56,34 @@ def update_user(
     session: T_Session,
     current_user: T_current_user,
 ):
+    user_ = session.scalar(
+        select(User).where((User.username == user.username))
+    )
+    email = session.scalar(
+        select(User).where((User.email == user.email))
+    )
+
+    if user_:
+        raise HTTPException(
+            status_code=HTTPStatus.CONFLICT,
+            detail='Username já consta no MADR'
+        )
+
+    if email:
+        raise HTTPException(
+            status_code=HTTPStatus.CONFLICT,
+            detail='Email já consta no MADR'
+        )
+
     if current_user.id != user_id:
         raise HTTPException(
             status_code=HTTPStatus.FORBIDDEN, detail='Não autorizado'
         )
 
-    current_user.username = user.username
+    current_user.username = sanitize(user.username)
     current_user.email = user.email
     current_user.password = get_password_hash(user.password)
+
     session.add(current_user)
     session.commit()
     session.refresh(current_user)

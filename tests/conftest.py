@@ -108,7 +108,7 @@ def romancista(session):
 
 @pytest.fixture
 def livro(session, romancista):
-    livro = Livros(ano='1999', titulo="Teste livro", autor_id=romancista.id)
+    livro = Livros(ano=1999, titulo="Teste livro", autor_id=romancista.id)
     session.add(livro)
     session.commit()
 

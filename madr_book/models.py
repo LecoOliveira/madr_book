@@ -51,7 +51,7 @@ class Livros:
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
     titulo: Mapped[str] = mapped_column(unique=True)
-    ano: Mapped[str]
+    ano: Mapped[int]
     autor_id: Mapped[int] = mapped_column(ForeignKey('romancistas.id'))
     created_at: Mapped[datetime] = mapped_column(
         init=False,
