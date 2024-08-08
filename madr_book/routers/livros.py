@@ -42,14 +42,14 @@ def listar_livros( # noqa
     ano: int | None = None,
     titulo: str | None = None,
     autor_id: int | None = None,
-    offset: str | None = None,
-    limit: str | None = None,
+    offset: int | None = 0,
+    limit: int | None = 20,
 ):
     query = select(Livros)
     if ano:
         query = query.where((Livros.ano == ano))
     if titulo:
-        query = query.filter(Livros.titulo.contains(titulo))
+        query = query.where((Livros.titulo == titulo))
     if autor_id:
         query = query.where((Livros.autor_id == autor_id))
 
@@ -115,7 +115,9 @@ def atualiza_livro(
         )
 
     for chave, valor in livro.model_dump(exclude_unset=True).items():
-        setattr(livro_, chave, valor)
+        if isinstance(valor, str):
+            valor_sanitizado = sanitize(valor)
+        setattr(livro_, chave, valor_sanitizado)
 
     session.add(livro_)
     session.commit()

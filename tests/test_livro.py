@@ -148,7 +148,7 @@ def test_livro_ja_existe(client, token, livro):
 def test_atualiza_livro(client, token, livro):
     response = client.patch(
         f'/livro/{livro.id}',
-        json={'ano': 2000},
+        json={'titulo': 'Teste10'},
         headers={'Authorization': f'Bearer {token}'},
     )
     assert response.status_code == HTTPStatus.OK
