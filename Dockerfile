@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 ENV POETRY_VIRTUALENVS_CREATE=false
 
-WORKDIR app/
+WORKDIR /app/
 COPY . .
 
 RUN apt-get update -y
