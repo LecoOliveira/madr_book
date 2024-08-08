@@ -77,6 +77,34 @@ def test_update_wrong_user(client, other_user, token):
     assert response.json() == {'detail': 'Não autorizado'}
 
 
+def test_update_user_if_exists(client, user, other_user, token):
+    response = client.put(
+        f'/conta/{other_user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'username': user.username,
+            'email': 'bob@example.com',
+            'password': 'mynewpassword',
+        },
+    )
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert response.json() == {'detail': 'Username já consta no MADR'}
+
+
+def test_update_email_if_exists(client, user, other_user, token):
+    response = client.put(
+        f'/conta/{other_user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'username': 'test',
+            'email': user.email,
+            'password': 'mynewpassword',
+        },
+    )
+    assert response.status_code == HTTPStatus.CONFLICT
+    assert response.json() == {'detail': 'Email já consta no MADR'}
+
+
 def test_delete_user(client, user, token):
     response = client.delete(
         f'/conta/{user.id}', headers={'Authorization': f'Bearer {token}'}
