@@ -17,7 +17,7 @@ T_current_user = Annotated[User, Depends(get_current_user)]
 
 
 @router.post('/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
-def create_user(user: UserSchema, session: T_Session):
+def criar_usuario(user: UserSchema, session: T_Session):
     db_user = session.scalar(
         select(User).where(
             (User.username == sanitize(user.username))
@@ -50,7 +50,7 @@ def create_user(user: UserSchema, session: T_Session):
 
 
 @router.put('/{user_id}', response_model=UserPublic)
-def update_user(
+def atualizar_usuario(
     user_id: int,
     user: UserSchema,
     session: T_Session,
@@ -92,7 +92,7 @@ def update_user(
 
 
 @router.delete('/{user_id}', response_model=Message)
-def delete_user(
+def deletar_usuario(
     user_id: int,
     session: T_Session,
     current_user: T_current_user,

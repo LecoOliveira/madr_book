@@ -21,7 +21,7 @@ T_OAuth_form = Annotated[OAuth2PasswordRequestForm, Depends()]
 
 
 @router.post('/token', response_model=Token)
-def login_for_access_token(session: T_Session, form_data: T_OAuth_form):
+def login(session: T_Session, form_data: T_OAuth_form):
     user = session.scalar(select(User).where(User.email == form_data.username))
 
     if not user or not verify_password(form_data.password, user.password):
